@@ -1,4 +1,41 @@
-export default {
+type ColorsType = {
+  white: string;
+  dark: string;
+  mainColor: string;
+  mainColor2: string;
+  mainColor3: string;
+  gray: string;
+  violet: string;
+  hoverText: string;
+  pink: string;
+  offNavyBlue: string;
+  navyBlue: string;
+  purple: string;
+  offPurple: string;
+  red: string;
+  skyBlue: string;
+  blue: string;
+  pantonePurple: string;
+  background: string;
+  textColor: string;
+  textColor2: string;
+  blueGradiant: string;
+  green: string;
+  colorBG: string;
+  colorBG1: string;
+  colorBG2: string;
+  white1: string;
+  facebook: string;
+  googleGradient: {
+    gradient1: string;
+    gradient2: string;
+    gradient3: string;
+  };
+} & {
+  [key: string]: any;
+}
+
+const Colors: ColorsType = {
   white: "#ffffff",
   dark: "#000000",
   mainColor: "#8F00FF",
@@ -24,4 +61,14 @@ export default {
   colorBG: "#a5f3fc",
   colorBG1: "#cffafe",
   colorBG2: "#ecfeff",
-};
+  white1: "#E8ECF4",
+  facebook: "#4092FF",
+  googleGradient: {
+    gradient1: "linear-gradient(45deg, #4285F4, #0F9D58, #F4B400, #4285F4)",
+    gradient2: "linear-gradient(45deg, #DB4437, #0F9D58, #F4B400, #0F9D58)",
+    gradient3: "linear-gradient(45deg, #4285F4, #0F9D58, #F4B400, #DB4437)",
+  },
+}
+
+export default Colors
+

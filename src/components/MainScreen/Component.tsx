@@ -1,11 +1,21 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import {Image, StyleSheet, Text, View} from 'react-native'
 import Container from "../../common/Container";
+import {LoginIcon} from "../SVG/index";
 
 const MainScreen = () => {
     return (
-        <Container><Text>Index Component</Text></Container>
+        <Container>
+            <Image source={LoginIcon} style={styles.svgImage}/>
+        </Container>
     )
 }
 
 export default MainScreen
+
+const styles = StyleSheet.create({
+    svgImage: {
+        width: 100,
+        height: 100
+    },
+})
