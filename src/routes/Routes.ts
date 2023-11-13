@@ -7,6 +7,7 @@ import OTPVerification from "../components/OTPVerification/Component";
 import CreatedNewPassword from "../components/ForgotPasswordScreen/CreateNewPassword/Component";
 import PasswordChangeSuccess from "../components/ForgotPasswordScreen/CreateNewPassword/PasswordChangeSuccess";
 import WelComeScreen from "../components/WelcomeScreen/Component";
+import CreatePostScreen from "../components/CreatePostScreen/Component";
 
 export const Screens = {
     welcomeScreen: "welcome-screen",
@@ -16,6 +17,8 @@ export const Screens = {
     OTPVerification: "otp-verification-screen",
     CreatedNewPassword: "create-new-password-screen",
     PasswordChangeSuccess: "password-change-success-screen",
+    MainScreen: "main-screen",
+    CreatePostScreen: "create-post-screen",
 }
 
 export const Routes = <TypeRouter[]>[
@@ -70,6 +73,22 @@ export const Routes = <TypeRouter[]>[
     {
         component: PasswordChangeSuccess,
         name: 'password-change-success-screen',
+        auth: false,
+        options: {
+            headerShown: false
+        }
+    },
+    {
+        component: MainScreen,
+        name: 'main-screen',
+        auth: false,
+        options: {
+            headerShown: false
+        }
+    },
+    {
+        component: CreatePostScreen,
+        name: 'create-post-screen',
         auth: false,
         options: {
             headerShown: false

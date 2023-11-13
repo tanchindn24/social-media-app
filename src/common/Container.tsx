@@ -20,14 +20,13 @@ type Props = {
     children: ReactNode;
     behaviorKeyboardAndroid?: behaviorKeyboard;
     behaviorKeyboardIOS?: behaviorKeyboard;
-
-
+    paddingHorizontal?: boolean;
 };
 // SplashScreen.preventAutoHideAsync();
 
 const {width, height} = Dimensions.get("screen");
 
-const Container = ({children, behaviorKeyboardAndroid = undefined, behaviorKeyboardIOS = 'padding'}: Props) => {
+const Container = ({children, behaviorKeyboardAndroid = undefined, behaviorKeyboardIOS = 'padding', paddingHorizontal = true}: Props) => {
 
     const [fontsLoaded] = useFonts({
         "Poppins-Black": require("../../assets/font/Poppins-Black.ttf"),
@@ -35,6 +34,7 @@ const Container = ({children, behaviorKeyboardAndroid = undefined, behaviorKeybo
         "Poppins-Thin": require("../../assets/font/Poppins-Thin.ttf"),
         "Poppins-Light": require("../../assets/font/Poppins-Light.ttf"),
         "Poppins-Regular": require("../../assets/font/Poppins-Regular.ttf"),
+        "Grandista-Normal": require("../../assets/font/Grandista.ttf"),
     });
 
     const onLayoutRootView = useCallback(async () => {
@@ -47,7 +47,7 @@ const Container = ({children, behaviorKeyboardAndroid = undefined, behaviorKeybo
     }
 
     return (
-        <View style={[styles.container]}>
+        <View style={[styles.container, paddingHorizontal && { paddingHorizontal: 20 }]}>
             <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? behaviorKeyboardIOS : behaviorKeyboardAndroid}
                 style={{flex: 1}}
@@ -66,7 +66,6 @@ const styles = StyleSheet.create({
     container: {
         width: width,
         height: height,
-        paddingHorizontal: 20,
         paddingTop: 40,
         backgroundColor: Colors.white,
     },
