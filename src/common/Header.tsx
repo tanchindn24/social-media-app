@@ -29,7 +29,7 @@ const Header = ({ title }: Props) => {
                     style={{
                         textTransform: 'uppercase',
                         fontWeight: '500',
-                        fontSize: 17,
+                        fontSize: 16,
                         textAlign: 'center',
                     }}
                 >

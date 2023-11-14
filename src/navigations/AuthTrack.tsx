@@ -5,19 +5,8 @@ import { DrawerActions, useNavigation } from "@react-navigation/native";
 import Icon from "@expo/vector-icons/Ionicons";
 import { TypeRouter } from "../types/Types";
 import { Routes } from "../routes/Routes";
-import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import MainScreen from "../components/MainScreen/Component";
 
 const Stack = createNativeStackNavigator();
-const Tab = createBottomTabNavigator();
-
-function MainTab() {
-  return (
-      <Tab.Navigator>
-        <Tab.Screen name="Main" component={MainScreen} />
-      </Tab.Navigator>
-  );
-}
 
 const AuthTrack = () => {
   const navigation = useNavigation();

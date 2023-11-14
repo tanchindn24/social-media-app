@@ -7,13 +7,16 @@ import {
     Platform,
     TouchableWithoutFeedback,
     Keyboard,
-    ScrollView
+    ScrollView, ActivityIndicator
 } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
 import {useFonts} from "expo-font";
 import * as Location from "expo-location";
 import {LinearGradient} from "expo-linear-gradient";
 import Colors from "../modules/Colors";
+import {useDispatch, useSelector} from "react-redux";
+import {AppDispatch, RootState} from "../../reducers/store";
+import {reset} from "../feature/AuthSlice";
 
 type behaviorKeyboard = "padding" | "height" | "position" | undefined;
 type Props = {
@@ -21,12 +24,21 @@ type Props = {
     behaviorKeyboardAndroid?: behaviorKeyboard;
     behaviorKeyboardIOS?: behaviorKeyboard;
     paddingHorizontal?: boolean;
+    loading?: boolean;
 };
 // SplashScreen.preventAutoHideAsync();
 
 const {width, height} = Dimensions.get("screen");
 
 const Container = ({children, behaviorKeyboardAndroid = undefined, behaviorKeyboardIOS = 'padding', paddingHorizontal = true}: Props) => {
+    const dispatch = useDispatch<AppDispatch>()
+    const authState = useSelector((state: RootState) => state.auth);
+
+    useEffect(() => {
+        if (authState.isSuccess) {
+            dispatch(reset());
+        }
+    }, [authState.isSuccess, dispatch]);
 
     const [fontsLoaded] = useFonts({
         "Poppins-Black": require("../../assets/font/Poppins-Black.ttf"),
@@ -56,6 +68,7 @@ const Container = ({children, behaviorKeyboardAndroid = undefined, behaviorKeybo
                     <View onLayout={onLayoutRootView}>{children}</View>
                 </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
+            {authState.isLoading && <ActivityIndicator size={"large"} style={styles.overlay}/>}
         </View>
     );
 };
@@ -68,5 +81,11 @@ const styles = StyleSheet.create({
         height: height,
         paddingTop: 40,
         backgroundColor: Colors.white,
+    },
+    overlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        opacity: 0.8,
+        justifyContent: 'center',
     },
 });

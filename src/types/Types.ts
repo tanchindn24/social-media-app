@@ -12,3 +12,10 @@ export type TypeRouter = {
   options: TypeOptionRoute;
   auth: boolean;
 };
+export type TypeRouterTabButton = {
+  name: string;
+  component: () => JSX.Element;
+  icon: any;
+  auth: boolean;
+  badge: boolean;
+};

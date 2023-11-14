@@ -21,7 +21,7 @@ const WelComeScreen = () => {
                     <Image source={require('../../../assets/images/icon.png')} style={styles.svgImage}/>
                     <ButtonLogin colorButton={'dark'} colorText={'white'} title="Login" onPress={handleLogin}/>
                     <ButtonLogin colorButton={'white'} colorText={'gray'} title="Register" onPress={handleRegister}/>
-                    <TouchableOpacity onPress={() => navigation.navigate('main-screen')}>
+                    <TouchableOpacity onPress={() => navigation.navigate('button-tab-navigation')}>
                         <Text style={styles.footerText}>Continue as a guest</Text>
                     </TouchableOpacity>
                 </View>

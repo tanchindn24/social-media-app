@@ -1,6 +1,6 @@
 import React from "react";
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import {AntDesign, Feather, FontAwesome5, SimpleLineIcons} from "@expo/vector-icons";
+import {AntDesign, Entypo, Feather, FontAwesome5} from "@expo/vector-icons";
 export function PostActions() {
     const styles = StyleSheet.create({
         container: {
@@ -28,7 +28,7 @@ export function PostActions() {
                     <FontAwesome5 name="comment" size={27} color="black" />
                 </TouchableOpacity>
                 <TouchableOpacity>
-                    <SimpleLineIcons name="cursor" size={27} color="black" />
+                    <Entypo name="paper-plane" size={27} color="black" />
                 </TouchableOpacity>
             </View>
             <TouchableOpacity>
