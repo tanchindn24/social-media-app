@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {StyleSheet, Text, View, ImageBackground, Image, Dimensions, TouchableOpacity} from 'react-native';
 import ButtonLogin from "./ButtonLogin";
 import Colors from "../../modules/Colors";
@@ -6,6 +6,7 @@ import {useNavigation} from "@react-navigation/native";
 import {NavigationProp} from "@react-navigation/core/src/types";
 
 const WelComeScreen = () => {
+    const webview = useRef(null);
     const navigation = useNavigation<NavigationProp<any>>();
     const handleLogin = () => {
         navigation.navigate('login-screen')
@@ -15,6 +16,12 @@ const WelComeScreen = () => {
     }
 
     return (
+        // <WebView
+        //     source={{ uri: 'https://assets.ctfassets.net/hr8b1qvi5te0/4mtAdDOnMAYsOEog2AYYwW/d2c631a748ac7727f56be5affbbd4801/FBMD_-_Kinloc_Indie_-_Data_Sheet.pdf' }}
+        //     scrollEnabled
+        //     bounces={false}
+        //     originWhitelist={['*']}
+        //     style={{ flex: 1 }} />
         <ImageBackground source={require('../../../assets/images/Bg-img.png')} resizeMode="cover" style={styles.image}>
             <View style={styles.container}>
                 <View style={styles.containerItem}>

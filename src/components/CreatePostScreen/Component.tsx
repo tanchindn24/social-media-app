@@ -5,6 +5,9 @@ import Colors from "../../modules/Colors";
 import {AntDesign} from "@expo/vector-icons";
 import AvatarComponent from "../UserAvatarWithName/AvatarComponent";
 import {ChipsInput, Button} from "react-native-ui-lib";
+import {useDispatch} from "react-redux";
+import {AppDispatch} from "../../../reducers/store";
+import {createPost} from "../../feature/PostSlice";
 
 type PostCreate = {
     route: any
@@ -13,7 +16,35 @@ type PostCreate = {
 const PostCreate = ({route}: PostCreate) => {
     const navigation = route.params.navigation;
     const images = route.params.image
+    const [description, setDescription] = useState<string>('')
+    const [image, setImage] = useState<string>('')
     const avt = 'https://images.pexels.com/photos/1382732/pexels-photo-1382732.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+    const dispatch = useDispatch<AppDispatch>()
+
+    useEffect(() => {
+        if (images) {
+            setImage(images)
+        }
+    }, [images])
+
+    const createPostHandle = () => {
+        const Params = {
+            description: description,
+            image: image,
+        }
+        dispatch(createPost(Params))
+            .then((resultAction) => {
+                if (createPost.fulfilled.match(resultAction)) {
+                    setDescription('');
+                    setImage('');
+                    navigation.navigate('main-screen')
+                }
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
     return (
         <Container>
             <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -49,12 +80,13 @@ const PostCreate = ({route}: PostCreate) => {
                     placeholder={'Write a caption'}
                     multiline={true}
                     numberOfLines={3}
+                    value={description}
+                    onChangeText={(valueDescription: string) => setDescription(valueDescription)}
                     style={styles.descriptionText}
                 />
             </View>
-            <TouchableOpacity>
-                <Button label={'Post'} size={Button.sizes.large} backgroundColor={Colors.facebook}/>
-            </TouchableOpacity>
+            <Button label={'Post'} size={Button.sizes.large} backgroundColor={Colors.facebook}
+                    onPress={createPostHandle}/>
         </Container>
     )
 }
