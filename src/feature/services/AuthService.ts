@@ -10,9 +10,18 @@ const getData = async () => {
 const register = async (userData: any) => {
     const response = await axios.post(URL_SERVER + '/sign-up', userData)
     if (response.data) {
-        console.log(response.data.userData)
         await AsyncStorage.setItem('user', JSON.stringify(response.data))
-        // window.location.href = '/sign-in'
+        Toast.show({
+            type: 'success',
+            text1: 'Notification',
+            text2: 'Register Success',
+        })
+    } else {
+        Toast.show({
+            type: 'error',
+            text1: 'Notification',
+            text2: response.data.message || 'Register Fail',
+        })
     }
     return response.data
 }
@@ -27,6 +36,12 @@ const login = async (userData: any) => {
             })
             await AsyncStorage.setItem('user', JSON.stringify(response.data))
         }
+    } else {
+        Toast.show({
+            type: 'error',
+            text1: 'Notification',
+            text2: response.data.message || 'Login Fail',
+        })
     }
     return response.data
 }

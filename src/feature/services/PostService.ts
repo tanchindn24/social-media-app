@@ -31,6 +31,12 @@ const createPost = async (post: any) => {
 
         return response.data.message
     }
+    Toast.show({
+        type: 'error',
+        text1: 'Notification',
+        text2: 'Create Post Fail',
+    })
+    return 'Create Post Fail'
 }
 
 const postService = {

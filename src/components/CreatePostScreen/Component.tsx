@@ -1,42 +1,63 @@
-import React, {useCallback, useEffect, useState} from 'react'
-import {Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View} from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator } from 'react-native'
 import Container from "../../common/Container";
 import Colors from "../../modules/Colors";
-import {AntDesign} from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import AvatarComponent from "../UserAvatarWithName/AvatarComponent";
-import {ChipsInput, Button} from "react-native-ui-lib";
-import {useDispatch} from "react-redux";
-import {AppDispatch} from "../../../reducers/store";
-import {createPost} from "../../feature/PostSlice";
+import { ChipsInput, Button } from "react-native-ui-lib";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../reducers/store";
+import { createPost } from "../../feature/PostSlice";
+import FirebaseUtils from '../../modules/FirebaseUtils';
+import * as FileSystem from 'expo-file-system';
 
-type PostCreate = {
-    route: any
+interface Props {
+    route: any,
 }
 
-const PostCreate = ({route}: PostCreate) => {
+const PostCreate = ({ route }: Props) => {
+    const avt = 'https://images.pexels.com/photos/1382732/pexels-photo-1382732.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
     const navigation = route.params.navigation;
     const images = route.params.image
     const [description, setDescription] = useState<string>('')
-    const [image, setImage] = useState<string>('')
-    const avt = 'https://images.pexels.com/photos/1382732/pexels-photo-1382732.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+    const [imageFromProps, setImageFromProps] = useState<string>('')
+    const [uploading, setUploading] = useState<boolean>(false)
     const dispatch = useDispatch<AppDispatch>()
 
     useEffect(() => {
         if (images) {
-            setImage(images)
+            const fetchImageInfo = async () => {
+                try {
+                    const uri = await FileSystem.getInfoAsync(images);
+                    setImageFromProps(uri.uri);
+                } catch (error) {
+                    console.error("Error fetching image info: ", error);
+                }
+            };
+            fetchImageInfo();
         }
     }, [images])
 
-    const createPostHandle = () => {
+    const createPostHandle = async () => {
+        setUploading(true);
+        const fileName = await imageFromProps.split('/').pop() || 'default-name';
+        const pathInStorage = '/posts/images';
+        const param = {
+            fileName: fileName,
+            fileUrl: imageFromProps,
+            path: pathInStorage
+        }
+        const imageUrl = await FirebaseUtils.uploadFile(param);
+        setUploading(false);
         const Params = {
             description: description,
-            image: image,
+            image: imageUrl,
         }
         dispatch(createPost(Params))
             .then((resultAction) => {
                 if (createPost.fulfilled.match(resultAction)) {
                     setDescription('');
-                    setImage('');
+                    setImageFromProps('');
                     navigation.navigate('main-screen')
                 }
             })
@@ -46,48 +67,51 @@ const PostCreate = ({route}: PostCreate) => {
     }
 
     return (
-        <Container>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <AntDesign name={'left'} size={24} color={Colors.dark}/>
-                </TouchableOpacity>
-                <Text style={{fontWeight: 'bold', fontSize: 20}}>Create Post</Text>
-                <View style={{marginRight: 10}}></View>
-            </View>
-            <View style={{marginTop: 25}}>
-                <View style={styles.container}>
-                    {images && <ImageBackground
-                        blurRadius={30}
-                        style={styles.imageContainer}
-                        source={{uri: images}}
-                        borderRadius={20}
-                    >
-                        <View style={styles.overlayTop}/>
-                        <Image source={{uri: images}} style={styles.image}/>
-                        <View style={styles.overlayBottom}/>
-                    </ImageBackground>}
-                    <View style={styles.avatarContainer}>
-                        <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                            <AvatarComponent avatarUrl={avt} width={60} height={60} size={50}/>
-                            <Text style={{fontWeight: 'bold', color: Colors.white, fontSize: 15}}>roses_are_rosie</Text>
+        <View>
+            <Container>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <AntDesign name={'left'} size={24} color={Colors.dark} />
+                    </TouchableOpacity>
+                    <Text style={{ fontWeight: 'bold', fontSize: 20 }}>Create Post</Text>
+                    <View style={{ marginRight: 10 }}></View>
+                </View>
+                <View style={{ marginTop: 25 }}>
+                    <View style={styles.container}>
+                        {images && <ImageBackground
+                            blurRadius={30}
+                            style={styles.imageContainer}
+                            source={{ uri: images }}
+                            borderRadius={20}
+                        >
+                            <View style={styles.overlayTop} />
+                            <Image source={{ uri: images }} style={styles.image} />
+                            <View style={styles.overlayBottom} />
+                        </ImageBackground>}
+                        <View style={styles.avatarContainer}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <AvatarComponent avatarUrl={avt} width={60} height={60} size={50} />
+                                <Text style={{ fontWeight: 'bold', color: Colors.white, fontSize: 15 }}>roses_are_rosie</Text>
+                            </View>
                         </View>
                     </View>
                 </View>
-            </View>
-            <View style={{marginVertical: 10}}>
-                <Text style={{fontWeight: 'bold', color: Colors.dark, fontSize: 15}}>roses_are_rosie</Text>
-                <ChipsInput
-                    placeholder={'Write a caption'}
-                    multiline={true}
-                    numberOfLines={3}
-                    value={description}
-                    onChangeText={(valueDescription: string) => setDescription(valueDescription)}
-                    style={styles.descriptionText}
-                />
-            </View>
-            <Button label={'Post'} size={Button.sizes.large} backgroundColor={Colors.facebook}
-                    onPress={createPostHandle}/>
-        </Container>
+                <View style={{ marginVertical: 10 }}>
+                    <Text style={{ fontWeight: 'bold', color: Colors.dark, fontSize: 15 }}>roses_are_rosie</Text>
+                    <ChipsInput
+                        placeholder={'Write a caption'}
+                        multiline={true}
+                        numberOfLines={3}
+                        value={description}
+                        onChangeText={(valueDescription: string) => setDescription(valueDescription)}
+                        style={styles.descriptionText}
+                    />
+                </View>
+                <Button label={'Post'} size={Button.sizes.large} backgroundColor={Colors.facebook}
+                    onPress={createPostHandle} />
+            </Container>
+            {uploading && <ActivityIndicator size={"large"} style={styles.overlay} />}
+        </View>
     )
 }
 
@@ -133,5 +157,11 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 120,
         textAlignVertical: 'top'
-    }
+    },
+    overlay: {
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+        opacity: 0.8,
+        justifyContent: 'center',
+    },
 })

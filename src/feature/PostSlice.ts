@@ -1,7 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import postService from "./services/PostService";
-import Toast from 'react-native-toast-message'
 
 const initialState = {
     posts: [],
@@ -15,8 +13,12 @@ export const createPost = createAsyncThunk('post/create_post', async (post: any)
     try {
         return await postService.createPost(post)
     } catch (error: any) {
+        const status = error.response.status
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
-        return message
+        return {
+            status,
+            message
+        }
     }
 })
 
@@ -33,9 +35,11 @@ const postSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(createPost.pending, (state: any) => {
+            //console.log("🚀 ~ file: PostSlice.ts:38 ~ builder.addCase ~ state:", state)
             state.isLoading = true
         })
         builder.addCase(createPost.fulfilled, (state: any, action: any) => {
+            //console.log("🚀 ~ file: PostSlice.ts:42 ~ builder.addCase ~ state:", state)
             state.isLoading = false
             state.isSuccess = true
             state.message = action.payload

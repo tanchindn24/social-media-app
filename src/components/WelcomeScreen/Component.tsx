@@ -1,13 +1,20 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, Text, View, ImageBackground, Image, Dimensions, TouchableOpacity} from 'react-native';
 import ButtonLogin from "./ButtonLogin";
 import Colors from "../../modules/Colors";
 import {useNavigation} from "@react-navigation/native";
 import {NavigationProp} from "@react-navigation/core/src/types";
+import { authentication, checkLogin } from '../../feature/AuthSlice';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../../../reducers/store';
+import Toast from 'react-native-toast-message';
 
 const WelComeScreen = () => {
+    const dispatch = useDispatch<AppDispatch>();
+    const [accessToken, setAccessToken] = useState<string>('');
     const webview = useRef(null);
-    const navigation = useNavigation<NavigationProp<any>>();
+    const navigation = useNavigation<NavigationProp<any>>()
+    ;
     const handleLogin = () => {
         navigation.navigate('login-screen')
     }
@@ -15,7 +22,45 @@ const WelComeScreen = () => {
         navigation.navigate('register-screen');
     }
 
+    useEffect (() => {
+        dispatch(checkLogin())
+        .then((resultAction) => {
+            if (checkLogin.fulfilled.match(resultAction)) {
+                const dataConvert = JSON.parse(resultAction.payload);
+                setAccessToken(dataConvert.accessToken)
+                handleContinue();
+            }
+        })
+    })
+
+    const handleContinue = () => {
+        dispatch(authentication(accessToken)).then((resultAction) => {
+            if (authentication.fulfilled.match(resultAction)) {
+                navigation.reset({
+                    index: 0,
+                    routes: [{name: 'button-tab-navigation'}],
+                })
+            } else {
+                Toast.show({
+                    type: 'error',
+                    position: 'top',
+                    text1: 'Error',
+                    text2: 'Tokens expire!',
+                    visibilityTime: 4000,
+                    autoHide: true,
+                    topOffset: 30,
+                    bottomOffset: 40,
+                });
+                navigation.reset({
+                    index: 0,
+                    routes: [{name: 'welcome-screen'}],
+                })
+            }
+        })
+    }
+
     return (
+
         // <WebView
         //     source={{ uri: 'https://assets.ctfassets.net/hr8b1qvi5te0/4mtAdDOnMAYsOEog2AYYwW/d2c631a748ac7727f56be5affbbd4801/FBMD_-_Kinloc_Indie_-_Data_Sheet.pdf' }}
         //     scrollEnabled
@@ -28,9 +73,9 @@ const WelComeScreen = () => {
                     <Image source={require('../../../assets/images/icon.png')} style={styles.svgImage}/>
                     <ButtonLogin colorButton={'dark'} colorText={'white'} title="Login" onPress={handleLogin}/>
                     <ButtonLogin colorButton={'white'} colorText={'gray'} title="Register" onPress={handleRegister}/>
-                    <TouchableOpacity onPress={() => navigation.navigate('button-tab-navigation')}>
+                    {/* <TouchableOpacity onPress={() => navigation.navigate('button-tab-navigation')}>
                         <Text style={styles.footerText}>Continue as a guest</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
             </View>
         </ImageBackground>

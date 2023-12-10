@@ -35,12 +35,19 @@ const RegisterScreen = () => {
         }
         dispatch(register(Params))
             .then((resultAction) => {
-                if (register.fulfilled.match(resultAction)) {
+                if (resultAction.payload.status == 200) {
                     setEmail('');
                     setUsername('');
                     setPassword('');
                     setConfirmPassword('');
                     navigation.navigate('login-screen')
+                } else if (resultAction.payload.status == 409 || resultAction.payload.status == 400) {
+                    Toast.show({
+                        type: 'error',
+                        position: 'top',
+                        text1: 'Error',
+                        text2: resultAction.payload.message
+                    })
                 }
             })
             .catch((error) => {

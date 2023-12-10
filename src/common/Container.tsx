@@ -33,6 +33,7 @@ const {width, height} = Dimensions.get("screen");
 const Container = ({children, behaviorKeyboardAndroid = undefined, behaviorKeyboardIOS = 'padding', paddingHorizontal = true}: Props) => {
     const dispatch = useDispatch<AppDispatch>()
     const authState = useSelector((state: RootState) => state.auth);
+    const postState = useSelector((state: RootState) => state.post);
 
     useEffect(() => {
         if (authState.isSuccess) {
@@ -68,7 +69,7 @@ const Container = ({children, behaviorKeyboardAndroid = undefined, behaviorKeybo
                     <View onLayout={onLayoutRootView}>{children}</View>
                 </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
-            {authState.isLoading && <ActivityIndicator size={"large"} style={styles.overlay}/>}
+            {authState.isLoading || postState.isLoading && <ActivityIndicator size={"large"} style={styles.overlay}/>}
         </View>
     );
 };

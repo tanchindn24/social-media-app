@@ -5,11 +5,11 @@ import Colors from "./../../modules/Colors"
 
 type UserProfileDataProps = {
     avatarUrl: string;
-    name: string;
-    username: string;
+    fullname: string;
+    biography: string;
 }
 
-export default function UserProfileData({ avatarUrl, name, username }: UserProfileDataProps) {
+export default function UserProfileData({ avatarUrl, fullname, biography }: UserProfileDataProps) {
     const handleClick = (url: string) => async () => {
         try {
             const supported = await Linking.canOpenURL(url);
@@ -45,8 +45,8 @@ export default function UserProfileData({ avatarUrl, name, username }: UserProfi
             </View>
         </View>
             <View style={{ marginTop: 5 }}>
-                <Text style={{ fontWeight: 'bold', fontSize: 20, textAlign: 'left' }}>{name}</Text>
-                <Text style={{ fontWeight: 'normal', fontSize: 15, textAlign: 'left' }}>{username}</Text>
+                <Text style={{ fontWeight: 'bold', fontSize: 20, textAlign: 'left' }}>{fullname}</Text>
+                <Text style={{ fontWeight: 'normal', fontSize: 15, textAlign: 'left' }}>{biography}</Text>
                 <Text style={{ fontWeight: 'normal', fontSize: 15, textAlign: 'left' }}>https://bit.ly/rose2024sgkr</Text>
                 <TouchableOpacity onPress={handleClick("https://www.youtube.com/@roses_are_rosie")}>
                     <View>

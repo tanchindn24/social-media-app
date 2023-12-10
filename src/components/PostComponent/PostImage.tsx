@@ -1,4 +1,4 @@
-import { View, Text, Image, ScrollView, TouchableOpacity } from "react-native";
+import { View, Text, Image, ScrollView, TouchableWithoutFeedback } from "react-native";
 import { Carousel, Spacings } from "react-native-ui-lib";
 import React from "react";
 
@@ -10,7 +10,7 @@ export default function PostImage({ urlImagePost }: { urlImagePost: Array<string
 
     return (
         <Carousel
-            style={{marginTop: 7}}
+            style={{ marginTop: 7 }}
             onChangePage={handlePageChange}
             itemSpacings={Spacings.s3}
             horizontal={true}
@@ -20,13 +20,13 @@ export default function PostImage({ urlImagePost }: { urlImagePost: Array<string
             allowAccessibleLayout={true}>
             {urlImagePost.map((url, index) => {
                 return (
-                    <TouchableOpacity>
+                    <TouchableWithoutFeedback >
                         <Image
                             key={index}
                             source={{ uri: url }}
                             style={{ width: "100%", height: 500, resizeMode: "cover" }}
                         />
-                    </TouchableOpacity>
+                    </TouchableWithoutFeedback >
                 )
             })}
         </Carousel>

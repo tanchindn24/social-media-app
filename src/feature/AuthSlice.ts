@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import authService from './services/AuthService'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 // Get user from localStorage
 
@@ -29,17 +28,24 @@ export const register = createAsyncThunk('auth/register', async (user: ValuesReg
     try {
         return await authService.register(user)
     } catch (error: any) {
+        const status = error.response.status
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
-        return message
+        return {
+            status,
+            message
+        }
     }
 })
 export const login = createAsyncThunk('auth/login', async (user: any) => {
     try {
         return await authService.login(user)
     } catch (error: any) {
+        const status = error.response.status
         const message = (error.response && error.response.data && error.response.data.message) || error.message || error.toString()
-        //console.log("🚀 ~ file: AuthSlice.tsx:41 ~ .addCase ~ state:", message)
-        return message
+        return {
+            status,
+            message
+        }
     }
 })
 export const authentication = createAsyncThunk('auth/authorization', async (accessToken: any) => {
@@ -92,13 +98,11 @@ export const authSlice = createSlice({
                 state.isLoading = true
             })
             .addCase(checkLogin.fulfilled, (state: any, action: any) => {
-                //console.log("🚀 ~ file: AuthSlice.tsx:94 ~ .addCase ~ state:", state)
                 state.isLoading = false
                 state.isSuccess = true
                 state.user = action.payload
             })
             .addCase(checkLogin.rejected, (state: any, action: any) => {
-                //console.log("🚀 ~ file: AuthSlice.tsx:101 ~ .addCase ~ state:", state)
                 state.isLoading = false
                 state.isError = true
                 state.message = action.payload
@@ -109,13 +113,11 @@ export const authSlice = createSlice({
                 state.isLoading = true
             })
             .addCase(login.fulfilled, (state: any, action: any) => {
-                //console.log("🚀 ~ file: AuthSlice.tsx:112 ~ .addCase ~ state:", state)
                 state.isLoading = false
                 state.isSuccess = true
                 state.user = action.payload
             })
             .addCase(login.rejected, (state: any, action: any) => {
-                //console.log("🚀 ~ file: AuthSlice.tsx:118 ~ .addCase ~ state:", state)
                 state.isLoading = false
                 state.isError = true
                 state.message = action.payload

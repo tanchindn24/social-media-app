@@ -7,12 +7,26 @@ import StoriesComponent from "../StoryComponent/Component";
 import PostComponent from "../PostComponent/Component";
 import {useNavigation} from "@react-navigation/native";
 import {NavigationProp} from "@react-navigation/core/src/types";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 type MainScreenProps = {
     navigation: NavigationProp<any>;
 };
 
 const MainScreen: React.FC<MainScreenProps> = () => {
+    const [currentUser, setCurrentUser] = useState<any>(null);
+    useEffect(() => {
+        AsyncStorage.getItem('user')
+            .then((user) => {
+                if (user) {
+                    setCurrentUser(JSON.parse(user));
+                }
+            })
+            .catch((err) => {
+                console.log(err);
+            });
+    }, []);
+
     const navigation = useNavigation<any>();
     return (
         <Container paddingHorizontal={false}>

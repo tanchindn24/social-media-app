@@ -11,7 +11,6 @@ type HeaderComponentProps = {
 
 const HeaderComponent: React.FC<HeaderComponentProps> = ({navigation}) => {
     const createPost = async (camera: boolean) => {
-        console.log('create post ...');
         const result = camera
             ? await ImagePicker.launchCameraAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.All,
