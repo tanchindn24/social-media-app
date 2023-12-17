@@ -28,9 +28,9 @@ const ButtonTabNavigation = () => {
                     options={{
                         headerShown: false,
                         tabBarShowLabel: false,
-                        tabBarStyle: {backgroundColor: Colors.white, height: 45},
+                        tabBarStyle: {backgroundColor: Colors.white, height: 55, paddingBottom: 5},
                         tabBarIcon: ({focused}: any) =>
-                            <Fontisto name={tab.icon} size={25} color={focused ?? Colors.dark}/>
+                            <Fontisto name={tab.icon} size={26} color={focused ?? Colors.dark}/>
 
                     }}
                     listeners={({navigation, route}: any) => ({

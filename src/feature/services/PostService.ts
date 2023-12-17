@@ -13,6 +13,7 @@ const createPost = async (post: any) => {
             idUser,
             post
         }
+        
         const response = await axios.post(URL_SERVER_POST + '/create', {
             parameters
         },{
@@ -21,6 +22,7 @@ const createPost = async (post: any) => {
                 'Content-Type': 'application/json'
             },
         })
+        
         if (response.data.message === 'success') {
             Toast.show({
                 type: 'success',

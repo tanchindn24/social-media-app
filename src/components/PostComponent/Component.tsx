@@ -37,10 +37,21 @@ const imagesUri: Array<string> = [
 ]
 
 const PostComponent = () => {
+    const ref = React.useRef<FlatList>(null);
+    const [index, setIndex] = React.useState<number>(0);
+
+    const handleScroll = (event: any) => {
+        const offsetY = event.nativeEvent.contentOffset.y;
+        if (offsetY === 0) {
+            //alert('top')
+        }
+      };
 
     return (
         <FlatList
-            style={{height: '78.4%'}}
+            ref={ref}
+            initialScrollIndex={index}
+            style={{height: '77.0%'}}
             horizontal={false}
             showsHorizontalScrollIndicator={false}
             legacyImplementation={false}
@@ -54,6 +65,7 @@ const PostComponent = () => {
                     </>
                 );
             }}
+            onScroll={handleScroll}
         />
     )
 }

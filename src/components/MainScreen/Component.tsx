@@ -14,7 +14,9 @@ type MainScreenProps = {
 };
 
 const MainScreen: React.FC<MainScreenProps> = () => {
+    const navigation = useNavigation<any>();
     const [currentUser, setCurrentUser] = useState<any>(null);
+
     useEffect(() => {
         AsyncStorage.getItem('user')
             .then((user) => {
@@ -26,13 +28,12 @@ const MainScreen: React.FC<MainScreenProps> = () => {
                 console.log(err);
             });
     }, []);
-
-    const navigation = useNavigation<any>();
+    
     return (
         <Container paddingHorizontal={false}>
             <HeaderComponent navigation={navigation}/>
             <View>
-                <StoriesComponent/>
+                <StoriesComponent isShowMyStories={true}/>
                 <View style={styles.tagHr}/>
                 <PostComponent/>
             </View>
