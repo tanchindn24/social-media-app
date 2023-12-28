@@ -1,9 +1,26 @@
 import { Text, TouchableOpacity, View } from "react-native";
-import { AntDesign, Feather, Ionicons } from "@expo/vector-icons";
+import { AntDesign, Feather, Ionicons, Entypo } from "@expo/vector-icons";
 import Colors from "../../modules/Colors";
 import React from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../reducers/store";
+import { logout } from "../../feature/AuthSlice";
+import { useNavigation } from "@react-navigation/native";
+import { NavigationProp } from "@react-navigation/core/src/types";
 
 export default function HeaderProfile({ user }: { user: any }) {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigation = useNavigation<NavigationProp<any>>()
+
+  const handleLogout = () => {
+    dispatch(logout())
+      .then((resultAction) => {
+        navigation.reset({
+          index: 0,
+          routes: [{ name: "welcome-screen" }],
+        })
+      })
+  }
   return (
     <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
       <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -20,8 +37,10 @@ export default function HeaderProfile({ user }: { user: any }) {
           <Feather name="plus-square" size={24} color="black" />
         </TouchableOpacity>
         <Text> </Text>
-        <TouchableOpacity>
-          <Ionicons name="options-outline" size={24} color="black" />
+        <TouchableOpacity onPress={() => {
+          handleLogout()
+        }}>
+          <Entypo name="log-out" size={24} color="black" />
         </TouchableOpacity>
       </View>
     </View>
