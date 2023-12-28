@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, Dimensions } from "react-native";
 import Container from "../../common/Container";
 import HeaderProfile from "./HeaderProfile";
 import UserProfileData from "../MainScreen/UserProfileData";
@@ -10,9 +10,38 @@ import { Ionicons, Entypo, FontAwesome5 } from "@expo/vector-icons";
 import StoryComponent from "../StoryComponent/Component";
 import DefaultImage from "../../modules/DefaultImage";
 import { getData } from "../../../Until/user";
+import { faker } from "@faker-js/faker";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "../../../reducers/store";
+import { getIsMyPost } from "../../feature/PostSlice";
+
+// const imagesPost: Array<string> = new Array(20).fill(0).map(
+//   () => (
+//     faker.image.urlLoremFlickr({ width: 130, height: 130, category: 'abstract' }) as string
+//   )
+// );
+
+const { width, height } = Dimensions.get("screen");
+console.log("🚀 ~ file: Component.tsx:23 ~ height:", height)
+console.log("🚀 ~ file: Component.tsx:24 ~ width:", width)
+
+// const onLayout=(event)=> {
+//   const {x, y, height, width} = event.nativeEvent.layout;
+
+// }
 
 const Profile = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const [myPosts, setMyPosts] = React.useState<any>(null);
+  const [imagesPost, setImagesPost] = React.useState<any>(null);
   const [userData, setUserData] = React.useState<any>(null);
+
+  const filterImagesFromPosts = (posts: any) => {
+    return posts.reduce((accumulator: any, post: any) => {
+      return accumulator.concat(post.img);
+    }, []);
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -22,7 +51,22 @@ const Profile = () => {
         console.error("Error:", error);
       }
     };
+    fetchData();
+  }, []);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const resultAction = await dispatch(getIsMyPost());
+        const result = resultAction.payload;
+        if (result) {
+          setMyPosts(result.data);
+          setImagesPost(filterImagesFromPosts(result));
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
     fetchData();
   }, []);
 
@@ -80,15 +124,37 @@ const Profile = () => {
       </View>
       <StoryComponent isShowMyStories={false} />
       <View style={styles.buttonOption}>
-        <TouchableOpacity style={styles.toButtonOption} onPress={() => {}}>
+        <TouchableOpacity style={styles.toButtonOption} onPress={() => { }}>
           <Ionicons name="grid-outline" size={24} color={Colors.dark} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.toButtonOption} onPress={() => {}}>
+        <TouchableOpacity style={styles.toButtonOption} onPress={() => { }}>
           <Entypo name="video" size={24} color={Colors.dark} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.toButtonOption} onPress={() => {}}>
+        <TouchableOpacity style={styles.toButtonOption} onPress={() => { }}>
           <FontAwesome5 name="user" size={24} color={Colors.dark} />
         </TouchableOpacity>
+      </View>
+      <View>
+        <FlatList
+          style={{ height: height - 560 }}
+          horizontal={false}
+          numColumns={3}
+          data={imagesPost}
+          scrollEnabled={true}
+          keyExtractor={(item, index) => {
+            return index.toString();
+          }}
+          renderItem={({ item }) => {
+            return (
+              <View style={{ flex: 1, alignItems: 'center' }}>
+                <TouchableOpacity>
+                  <Image source={{ uri: item }}
+                    style={{ width: 130, height: 130 }} />
+                </TouchableOpacity>
+              </View>
+            )
+          }}>
+        </FlatList>
       </View>
     </Container>
   );

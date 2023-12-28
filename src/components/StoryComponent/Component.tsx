@@ -5,7 +5,6 @@ import { faker } from "@faker-js/faker";
 import { BadgePosition } from "react-native-ui-lib/src/components/avatar";
 import DefaultImage from "../../modules/DefaultImage";
 import AvatarWithName from "../UserAvatarWithName/Component";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getData } from "../../../Until/user";
 
 interface Data {
@@ -16,11 +15,11 @@ interface Data {
 
 const data: Data[] = new Array(20).fill(0).map(
   () =>
-    ({
-      name: faker.internet.userName(),
-      avatar: faker.image.avatar(),
-      key: faker.string.uuid(),
-    } as Data)
+  ({
+    name: faker.internet.userName(),
+    avatar: faker.image.avatar(),
+    key: faker.string.uuid(),
+  } as Data)
 );
 
 interface Props {

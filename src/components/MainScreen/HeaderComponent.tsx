@@ -4,7 +4,6 @@ import Colors from "../../modules/Colors";
 import React from "react";
 import { NavigationProp } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type HeaderComponentProps = {
@@ -16,18 +15,18 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ navigation }) => {
   const createPost = async (camera: boolean) => {
     const result = camera
       ? await ImagePicker.launchCameraAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.All,
-          allowsEditing: false,
-          aspect: [4, 3],
-          quality: 1,
-        })
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: false,
+        aspect: [4, 3],
+        quality: 1,
+      })
       : await ImagePicker.launchImageLibraryAsync({
-          mediaTypes: ImagePicker.MediaTypeOptions.All,
-          allowsEditing: false,
-          aspect: [4, 3],
-          quality: 1,
-          allowsMultipleSelection: true,
-        });
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: false,
+        aspect: [4, 3],
+        quality: 1,
+        allowsMultipleSelection: true,
+      });
 
     if (AsyncStorage.getItem("images") != null) {
       AsyncStorage.removeItem("images");
@@ -39,10 +38,6 @@ const HeaderComponent: React.FC<HeaderComponentProps> = ({ navigation }) => {
       });
       await AsyncStorage.setItem("images", JSON.stringify(images));
 
-      // const storedImagesString:any = await AsyncStorage.getItem('images');
-      // const storedImages = await JSON.parse(storedImagesString);
-
-      // console.log('Stored images:', storedImages);
       navigation.navigate("create-post-screen", {
         navigation: navigation,
       });

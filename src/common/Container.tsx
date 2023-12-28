@@ -1,4 +1,4 @@
-import React, {ReactNode, useCallback, useEffect} from "react";
+import React, { ReactNode, useCallback, useEffect } from "react";
 import {
     StyleSheet,
     View,
@@ -10,13 +10,13 @@ import {
     ScrollView, ActivityIndicator
 } from "react-native";
 import * as SplashScreen from "expo-splash-screen";
-import {useFonts} from "expo-font";
+import { useFonts } from "expo-font";
 import * as Location from "expo-location";
-import {LinearGradient} from "expo-linear-gradient";
+import { LinearGradient } from "expo-linear-gradient";
 import Colors from "../modules/Colors";
-import {useDispatch, useSelector} from "react-redux";
-import {AppDispatch, RootState} from "../../reducers/store";
-import {reset} from "../feature/AuthSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "../../reducers/store";
+import { reset } from "../feature/AuthSlice";
 
 type behaviorKeyboard = "padding" | "height" | "position" | undefined;
 type Props = {
@@ -28,9 +28,9 @@ type Props = {
 };
 // SplashScreen.preventAutoHideAsync();
 
-const {width, height} = Dimensions.get("screen");
+const { width, height } = Dimensions.get("screen");
 
-const Container = ({children, behaviorKeyboardAndroid = undefined, behaviorKeyboardIOS = 'padding', paddingHorizontal = true}: Props) => {
+const Container = ({ children, behaviorKeyboardAndroid = undefined, behaviorKeyboardIOS = 'padding', paddingHorizontal = true }: Props) => {
     const dispatch = useDispatch<AppDispatch>()
     const authState = useSelector((state: RootState) => state.auth);
     const postState = useSelector((state: RootState) => state.post);
@@ -63,13 +63,11 @@ const Container = ({children, behaviorKeyboardAndroid = undefined, behaviorKeybo
         <View style={[styles.container, paddingHorizontal && { paddingHorizontal: 20 }]}>
             <KeyboardAvoidingView
                 behavior={Platform.OS === "ios" ? behaviorKeyboardIOS : behaviorKeyboardAndroid}
-                style={{flex: 1}}
+                style={{ flex: 1 }}
             >
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <View onLayout={onLayoutRootView}>{children}</View>
-                </TouchableWithoutFeedback>
+                <View onLayout={onLayoutRootView}>{children}</View>
             </KeyboardAvoidingView>
-            {authState.isLoading || postState.isLoading && <ActivityIndicator size={"large"} style={styles.overlay}/>}
+            {authState.isLoading || postState.isLoading && <ActivityIndicator size={"large"} style={styles.overlay} />}
         </View>
     );
 };

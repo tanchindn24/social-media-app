@@ -1,15 +1,20 @@
-import {Text, View} from "react-native";
+import { Text, View } from "react-native";
 import React from "react";
 
-export function PostDescription() {
+interface Description {
+    username: string;
+    description: string;
+}
+
+export function PostDescription({ username, description }: Description) {
     return (
-        <View style={{marginHorizontal: 12, marginVertical: 3, flexDirection: 'row'}}>
-            <Text style={{fontWeight: 'bold', fontSize: 14}}>
-                roses_are_rosie
+        <View style={{ marginHorizontal: 12, marginVertical: 3, flexDirection: 'row' }}>
+            <Text style={{ fontWeight: 'bold', fontSize: 14 }}>
+                {username}
             </Text>
             <Text>{' '}</Text>
-            <Text style={{fontWeight: 'normal', fontSize: 14}}>
-                this is a description written by roses_are_rosie
+            <Text style={{ fontWeight: 'normal', fontSize: 14 }}>
+                {description}
             </Text>
         </View>
     )

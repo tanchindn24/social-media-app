@@ -1,16 +1,16 @@
-import {LinearGradient} from "expo-linear-gradient";
-import {StyleSheet, TouchableOpacity, View} from "react-native";
-import {Avatar} from "react-native-ui-lib";
+import { LinearGradient } from "expo-linear-gradient";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { Avatar } from "react-native-ui-lib";
 import React from "react";
 
 interface AvatarComponentProps {
-    avatarUrl: string;
+    avatarUrl: any;
     width: number;
     height: number;
     size: number;
 }
 
-export default function AvatarComponent({avatarUrl, width, height, size}: AvatarComponentProps) {
+export default function AvatarComponent({ avatarUrl, width, height, size }: AvatarComponentProps) {
     const styles = StyleSheet.create({
         gradientContainer: {
             borderRadius: 100,
